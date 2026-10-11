@@ -1,0 +1,159 @@
+<div class="container mb-5">
+
+  <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+    <div>
+      <h2 class="fw-bold text-dark mb-1">Módulo de Auditoría y Control Administrativo</h2>
+      <p class="text-muted mb-0">Monitoreo transaccional del staff médico y análisis operacional de atención.</p>
+    </div>
+    <div class="badge bg-dark bg-opacity-10 text-dark border py-2 px-3 fs-xs rounded-3 fw-bold">
+      <i class="bi bi-shield-fill-check text-primary me-2"></i>Rol: Administrador General
+    </div>
+  </div>
+
+  <div class="row g-4 mb-5">
+    
+    <div class="col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm kpi-card p-4 bg-white rounded-3">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <span class="text-muted small fw-semibold text-uppercase d-block mb-1">Especialistas</span>
+            <h3 class="fw-bold text-dark mb-0">{{ medicosCount() }}</h3>
+          </div>
+          <div class="kpi-icon bg-primary bg-opacity-10 text-primary">
+            <i class="bi bi-people-fill fs-4"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm kpi-card p-4 bg-white rounded-3">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <span class="text-muted small fw-semibold text-uppercase d-block mb-1">Citas Globales</span>
+            <h3 class="fw-bold text-dark mb-0">{{ totalCitas() }}</h3>
+          </div>
+          <div class="kpi-icon bg-info bg-opacity-10 text-info">
+            <i class="bi bi-activity fs-4"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm kpi-card p-4 bg-white rounded-3">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <span class="text-muted small fw-semibold text-uppercase d-block mb-1">Turnos Activos</span>
+            <h3 class="fw-bold text-dark mb-0">{{ activasCount() }}</h3>
+          </div>
+          <div class="kpi-icon bg-warning bg-opacity-10 text-warning">
+            <i class="bi bi-calendar2-week-fill fs-4"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm kpi-card p-4 bg-white rounded-3">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <span class="text-muted small fw-semibold text-uppercase d-block mb-1">Tasa de Éxito</span>
+            <h3 class="fw-bold text-success mb-0">{{ ocupacionPct() }}%</h3>
+          </div>
+          <div class="kpi-icon bg-success bg-opacity-10 text-success">
+            <i class="bi bi-graph-up-arrow fs-4"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row g-4">
+    
+    <div class="col-lg-7">
+      <div class="card border-0 shadow-sm rounded-3 bg-white p-4 h-100">
+        <h5 class="fw-bold text-dark mb-4">
+          <i class="bi bi-file-earmark-person text-secondary me-2"></i>Monitoreo de Staff Clínico
+        </h5>
+        
+        <div class="table-responsive">
+          <table class="table align-middle admin-table mb-0">
+            <thead class="table-light text-muted small fw-semibold">
+              <tr>
+                <th scope="col" class="ps-3">Especialista</th>
+                <th scope="col">Identificador Único</th>
+                <th scope="col" class="text-end pe-3">Estado Operativo</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (medico of usuariosFiltradosPorRolMedico(); track medico.id_usuario) {
+                <tr class="table-row-hover">
+                  <td class="ps-3">
+                    <div class="d-flex align-items-center gap-3">
+                      
+                      <img [src]="'https://api.dicebear.com/7.x/lorelei/svg?seed=' + medico.correo" 
+                           alt="Avatar del Especialista" 
+                           class="rounded-circle bg-light p-1 shadow-xs border border-opacity-10" 
+                           style="width: 40px; height: 40px; object-fit: cover;">
+                           
+                      <div>
+                        <div class="fw-bold text-dark fs-sm">{{ medico.nombre }}</div>
+                        <small class="text-muted text-xs font-monospace">{{ medico.correo }}</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge bg-light text-secondary border py-1 px-2 font-monospace fs-xs">
+                      USR-{{ medico.id_usuario }}
+                    </span>
+                  </td>
+                  <td class="text-end pe-3">
+                    <span class="badge" [ngClass]="medico.activo ? 'bg-success bg-opacity-10 text-success' : 'bg-danger bg-opacity-10 text-danger'">
+                      {{ medico.activo ? 'Disponible' : 'Inactivo' }}
+                    </span>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="3" class="text-center py-4 text-muted small">
+                    No hay médicos registrados en el sistema de base de datos actualmente.
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card border-0 shadow-sm rounded-3 bg-white p-4 h-100">
+        <h5 class="fw-bold text-dark mb-4">
+          <i class="bi bi-pie-chart-fill text-secondary me-2"></i>Productividad Institucional
+        </h5>
+        
+        <div class="py-2">
+          <label class="text-muted small fw-semibold text-uppercase d-block mb-2">Porcentaje de Citas Concluidas</label>
+          <div class="progress mb-4 rounded-pill" style="height: 10px;">
+            <div class="progress-bar bg-success rounded-pill" role="progressbar" [style.width]="ocupacionPct() + '%'"></div>
+          </div>
+          <p class="text-secondary fs-sm mb-4">
+            Mide la cantidad de atenciones médicas finalizadas exitosamente con respecto al total de solicitudes recibidas en el portal del paciente.
+          </p>
+
+          <div class="p-3 bg-light rounded-3 d-flex align-items-center gap-3">
+            <div class="fs-3 text-primary"><i class="bi bi-shield-shaded"></i></div>
+            <div>
+              <strong class="text-dark d-block fs-sm">Garantía de Control de Calidad</strong>
+              <small class="text-muted text-xs">Métricas analíticas calculadas bajo el estándar estricto de Signals de Angular.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
