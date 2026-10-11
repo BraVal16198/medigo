@@ -7,6 +7,9 @@ apiUrl = apiUrl.replace(/^['"]|['"]$/g, '');
 if (!/^https?:\/\//i.test(apiUrl)) {
   apiUrl = `https://${apiUrl}`;
 }
+if (!apiUrl.includes('.')) {
+  apiUrl = `${apiUrl}.onrender.com`;
+}
 apiUrl = apiUrl.replace(/\/$/, '').replaceAll("'", '');
 
 const file = `export const environment = {
