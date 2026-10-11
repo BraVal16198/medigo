@@ -23,7 +23,6 @@ services:
   - type: web
     name: medigo-brayan-web
     runtime: static
-    plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist/frontend/browser
